@@ -13,23 +13,6 @@ def pintar_centrar_texto(screen:pygame.Surface,text_render:str,text_rect:pygame.
     """
     screen.blit(text_render,(text_rect.x+(text_rect.width - text_render.get_width())/2,text_rect.y+(text_rect.height - text_render.get_height())/2))
 
-
-def escalar_imagenes_fondo (direc_imagen:str,tamanio:tuple):
-    """escala la imagen sugun el tamaño dado 
-
-    Args:
-        direc_imagen (str): directorio de la imagen
-        tamanio (tuple): tapaño a escalar
-
-    Returns:
-        superficie 
-    """    
-    imagen = pygame.image.load(direc_imagen)
-    imagen = pygame.transform.scale(imagen,(tamanio))
-    return imagen
-
-LOSE_IMAGE = escalar_imagenes_fondo(f"{PATH}/you_die.png",SIZE_SCREEN)
-
 def crear_boton(boton_rec:pygame.Rect,color_rec:tuple,texto:str,texto_color:tuple):
     """ 
     Crea un botón representado como un diccionario, con caracteristicas para dibujar, 
@@ -151,7 +134,8 @@ def tablero(dificultad):
     matriz = inicializar_matriz(dificultad[0],dificultad[1])
     return matriz
 
-def crear_botones_matriz(matriz,cordenada_x,cordenada_y):
+def crear_botones_matriz(matriz):
+
     """
         crea los botones segun la matris pasada
 
@@ -160,14 +144,19 @@ def crear_botones_matriz(matriz,cordenada_x,cordenada_y):
             cordenada_x: donde empiza a dibujar los botones segun el eje x 
             cordenada_y: donde empiza a dibujar los botones segun el eje y
     """
+    pantalla_centro_x,pantalla_centro_y = SCREEN.get_rect().center
+
+    matriz_ancho = len(matriz[0]) * 27
+    matriz_alto = len(matriz) * 25
+
+    cordenada_x = pantalla_centro_x - matriz_ancho // 2
+    cordenada_y = pantalla_centro_y - matriz_alto // 2
+
+
     cuadricula = []
     for fila in range(len(matriz)):
-        cordenada_y +=27
-        if fila != 0:
-            cordenada_x -= 25 * len(matriz[0])
         for columna in range(len(matriz[0])):
-            cordenada_x += 25
-            cuadricula.append(casilla_juego((cordenada_x,cordenada_y,20,20),(100,100,100),str(matriz[fila][columna]),(100,100,100),fila,columna))
+            cuadricula.append(casilla_juego((cordenada_x + columna * 27,cordenada_y + fila * 27,20, 20),(100, 100, 100),str(matriz[fila][columna]),(100, 100, 100),fila,columna))
     
     return cuadricula
 

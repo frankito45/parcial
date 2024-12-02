@@ -1,4 +1,5 @@
 import pygame
+# from configuraciones import JUGAR_MUSIC
 
 def escalar_imagenes_fondo (direc_imagen:str,tamanio:tuple):
     """escala la imagen sugun el tamaño dado 
@@ -17,17 +18,10 @@ def escalar_imagenes_fondo (direc_imagen:str,tamanio:tuple):
 def banderas(casillas:list):
     for boton in casillas:
         if boton['boton_rec'].collidepoint(pygame.mouse.get_pos()):
-            if not boton.get('clicado', False):
-                if not boton.get('marcado', False):
-                    boton['marcado'] = True  # Marcar con signo de pregunta
+            print(boton)
+            if boton['clicado'] == False:
+                if boton['marcado'] == False:
+                    boton['marcado'] = True
                 else:
                     boton['marcado'] = False
 
-# def obtener_resultado(win):
-#     if win == False:
-#         lose_music.play()
-#         screen.blit(lose_img,(0,0))
-#         screen.blit(prueba,(460,280))
-
-#     else:
-#         pass

@@ -53,10 +53,9 @@ def ver_puntajes(screen):
 
 def guardar_puntuacion(screen,puntos_en_pantalla,die,cont_puntos):
 
-   
     LOSE_MUSIC.set_volume(0.05)
     
-    prueba = FUENTE_3.render("Ingrese su Nombre",0,"black")
+    texto = FUENTE_3.render("Ingrese su Nombre",0,"black")
     nombre_ingresado = ""
     flag = True
 
@@ -65,10 +64,11 @@ def guardar_puntuacion(screen,puntos_en_pantalla,die,cont_puntos):
         if die == True:
             LOSE_MUSIC.play()
             screen.blit(LOSE_IMAGE,(0,0))
-            screen.blit(prueba,(460,280))
+            screen.blit(texto,(460,280))
 
         else:
-            pass
+            WIN_MUSIC.play()
+            screen.blit(WIN_FONDO,(0,0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -107,10 +107,7 @@ def jugar(screen,dificultad):
     lista_bomba = crear_bombas(dificultad[2],matriz)
     cargar_bomba(matriz,lista_bomba)
     detectar_bombas(matriz,lista_bomba)
-    if len(matriz) > 15:
-        juego = crear_botones_matriz(matriz,270,150)
-    else:
-        juego = crear_botones_matriz(matriz,470,180)
+    juego = crear_botones_matriz(matriz)
     
     #------------------------------------------------
     mi_evento = pygame.USEREVENT + 1
@@ -120,7 +117,7 @@ def jugar(screen,dificultad):
     cont_min = 0
 
     
-    contador_puntos = 0000
+    contador_puntos = 0
     
     you_die = False
     JUGAR_MUSIC.play()
@@ -131,55 +128,63 @@ def jugar(screen,dificultad):
 
     flag = True
     while flag:
-        if you_die == False:
-            screen.blit(FONDO_JUGAR,(0,0))
-            
-            relog_contador = FUENTE_2.render(f"Tiempo: 0{cont_min} : {cont_seg}",True,"white","black")
-            puntos_en_pantalla = FUENTE_2.render(f"Puntos: {contador_puntos}",True,"white","black")
-            
 
-            for boton in juego:
-                animacion_cacilla(screen,boton,fuente_matriz,'boton_rec',(150, 150, 150),0,'white')
-                if boton['marcado']:
-                    screen.blit(BANDERA, (boton['boton_rec'].x,boton['boton_rec'].y))
+        screen.blit(FONDO_JUGAR,(0,0))
+
+        relog_contador = FUENTE_2.render(f"Tiempo: {cont_min:02d} : {cont_seg:02d}",True,"white","black")
+        puntos_en_pantalla = FUENTE_2.render(f"Puntos: {contador_puntos:03d}",True,"white","black")
+
+
+        for boton in juego:
+            animacion_cacilla(screen,boton,fuente_matriz,'boton_rec',(150, 150, 150),0,'white')
+            if boton['marcado']:
+                screen.blit(BANDERA, (boton['boton_rec'].x,boton['boton_rec'].y))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                flag = False
+                pygame.quit()
+            if event.type == mi_evento:
+                    cont_seg += 1
+                    if cont_seg  == 60:
+                        cont_min += 1
+                        cont_seg = 0
             
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                for boton in juego:
+                    if boton['boton_rec'].collidepoint(pygame.mouse.get_pos()):
+                        if not boton.get('clicado', False):
+                            if not boton.get('marcado', False) : # si no fue clicado
+                                boton['evento'] = True  # Marcado como clik
+                                if boton['texto'] == "-1":
+                                    JUGAR_MUSIC.stop()
+                                    you_die = True
+                                    flag = False
+                                else:
+                                    contador_puntos += 1
+                                    boton['clicado'] = True
+                if boton_reiniciar['boton_rec'].collidepoint(pygame.mouse.get_pos()):
+                    JUGAR_MUSIC.stop()
                     flag = False
-                    pygame.quit()
-                if event.type == mi_evento:
-                        cont_seg += 1
-                        if cont_seg  == 60:
-                            cont_min += 1
-                            cont_seg = 0
-                
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    for boton in juego:
-                        if boton['boton_rec'].collidepoint(pygame.mouse.get_pos()):
-                            if not boton.get('clicado', False):
-                                if not boton.get('marcado', False) : # si no fue clicado
-                                    boton['evento'] = True  # Marcado como clik
-                                    if boton['texto'] == "-1":
-                                        JUGAR_MUSIC.stop()
-                                        you_die = True
-                                        flag = False
-                                    else:
-                                        contador_puntos += 1
-                                        boton['clicado'] = True
+                    jugar(screen,dificultad)
                     
-                    if boton_reiniciar['boton_rec'].collidepoint(pygame.mouse.get_pos()):
-                        JUGAR_MUSIC.stop()
-                        flag = False
-                        jugar(screen,dificultad)
-                        
-                    if boton_volver['boton_rec'].collidepoint(pygame.mouse.get_pos()):
-                        JUGAR_MUSIC.stop()
-                        flag = False
-                        niveles(screen)
+                if boton_volver['boton_rec'].collidepoint(pygame.mouse.get_pos()):
+                    JUGAR_MUSIC.stop()
+                    flag = False
+                    niveles(screen)
 
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                   banderas(juego)
-            
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                banderas(juego)
+            you_win = True # tomo que siempre esta ganando
+            for boton in juego:
+                        if boton['texto'] != "-1":  # Solo verifica botones que no sean bombas
+                            if not boton['clicado']:
+                                you_win = False
+                                # si no esta clicado uno relevante no ganaste aun    
+            if you_win: # si ganaste, eso, ganaste xd
+                JUGAR_MUSIC.stop()
+                flag = False
+                
             screen.blit(relog_contador,(900,100))    
             screen.blit(puntos_en_pantalla,(200,100))
             animacion_boton(screen,boton_volver,FUENTE_1,'boton_rec',boton_volver['color'],20,("white"))
