@@ -4,7 +4,6 @@ from configuraciones import *
 
 
 
-
 def pintar_centrar_texto(screen:pygame.Surface,text_render:str,text_rect:pygame.Rect):
     """centra el texto segun el rectangulo pasado
     Args:
@@ -29,6 +28,7 @@ def escalar_imagenes_fondo (direc_imagen:str,tamanio:tuple):
     imagen = pygame.transform.scale(imagen,(tamanio))
     return imagen
 
+LOSE_IMAGE = escalar_imagenes_fondo(f"{PATH}/you_die.png",SIZE_SCREEN)
 
 def crear_boton(boton_rec:pygame.Rect,color_rec:tuple,texto:str,texto_color:tuple):
     """ 
@@ -114,9 +114,16 @@ def animacion_boton(screen:pygame.surface, boton:dict,fuente:pygame.font.Font, p
         fuentex = fuente.render(boton['texto'],True,texto_color)
         pintar_centrar_texto(screen,fuentex,boton['boton_rec'].move(5,5))
     else:
-        pygame.draw.rect(screen, color, boton[parametro],border_radius=borde)
+        pygame.draw.rect(screen, boton['color'], boton['boton_rec'],border_radius=borde)
         fuentex = fuente.render(boton['texto'],True,boton['texto_color'])
         pintar_centrar_texto(screen,fuentex,boton['boton_rec'])
+
+        
+        
+def dibujar_boton(screen, boton:dict, fuente, borde=0):
+    pygame.draw.rect(screen, boton['color'], boton['boton_rec'],border_radius=borde)
+    fuentex = fuente.render(boton['texto'],True,boton['texto_color'])
+    pintar_centrar_texto(screen,fuentex,boton['boton_rec'])
 
 
 def animacion_cacilla(screen:pygame.Surface, boton:dict,fuente:pygame.font.Font, parametro:pygame.Rect, color:tuple, borde:int,texto_color:tuple,imagen=None):
@@ -138,16 +145,6 @@ def animacion_cacilla(screen:pygame.Surface, boton:dict,fuente:pygame.font.Font,
         pintar_centrar_texto(screen,fuentex,boton['boton_rec'])
     else:
         pygame.draw.rect(screen, boton['color'], boton[parametro],border_radius=borde)
-
-
-
-
-# def tablilla_buscaminas(dificultad):
-#     matriz = inicializar_matriz(dificultad[0],dificultad[1])
-#     bombas = crear_bombas(dificultad[2],matriz)
-#     cargar_bomba(matriz,bombas)
-#     detectar_bombas(matriz,bombas)
-#     return matriz
 
 def tablero(dificultad):
     'inicializa la matris segun la dificultad dada'

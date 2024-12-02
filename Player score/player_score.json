@@ -90,5 +90,13 @@
   {
     "nombre": "cv",
     "puntuacion": 1
+  },
+  {
+    "nombre": "dele",
+    "puntuacion": 5
+  },
+  {
+    "nombre": "15",
+    "puntuacion": 15
   }
 ]
