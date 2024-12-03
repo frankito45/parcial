@@ -16,11 +16,11 @@ def inicializar_matriz(cant_filas:int, cant_columnas:int)->list:
     return matriz
 
 
-def crear_bombas(cantidad,matriz):
+def crear_bombas(cantidad:int,matriz:list) -> set:
     """crea una lista de bombas aleatorias 
 
     Args:
-        cantidad (int): cantidad de bomvas
+        cantidad (int): cantidad de bombas
         matriz (list): matriz
     """
     lista_bombas = set()
@@ -34,12 +34,26 @@ def crear_bombas(cantidad,matriz):
     return lista_bombas
 
 
-def cargar_bomba(matriz, lista_bombas):
+def cargar_bomba(matriz:list, lista_bombas:set):
+    """Coloca bombas en una matriz de juego basada en las posiciones especificadas
+
+    Args:
+        matriz (list): matriz
+        lista_bombas (set):conjunto de tuplas `(y, x)` que representan las coordenadas de las bombas.
+                            Cada tupla indica la fila (`y`) y la columna (`x`) donde se colocará una bomba
+    """
+
     for y,x in lista_bombas:
         matriz[y][x] = -1
 
 #                               Lista de seters
-def detectar_bombas(matriz,lista_bombas):
+def detectar_bombas(matriz:list,lista_bombas:set):
+    """Calcula el número de bombas adyacentes
+
+    Args:
+        matriz (list): matriz
+        lista_bombas (set): conjunto de tuplas que representa la pocicion de las bombas
+    """
     filas = len(matriz)
     columnas = len(matriz[0])
     
@@ -65,10 +79,10 @@ def detectar_bombas(matriz,lista_bombas):
 
 
 
-def parseo_dato(matriz):
-    for y in range(len(matriz)):
-        for x in range(len(matriz)):
-            matriz[y][x] = str(matriz[y][x])
+# def parseo_dato(matriz):
+#     for y in range(len(matriz)):
+#         for x in range(len(matriz)):
+#             matriz[y][x] = str(matriz[y][x])
 
 
 def mostrar_matriz(matriz):

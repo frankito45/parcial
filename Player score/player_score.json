@@ -98,5 +98,9 @@
   {
     "nombre": "15",
     "puntuacion": 15
+  },
+  {
+    "nombre": "\u001bd",
+    "puntuacion": 4
   }
 ]

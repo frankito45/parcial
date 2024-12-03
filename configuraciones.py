@@ -26,7 +26,7 @@ FONDO_PUNTAJE = escalar_imagenes_fondo(f"{PATH}/Fondo_puntaje.png",SIZE_SCREEN)
 FONDO_JUGAR = escalar_imagenes_fondo(f"{PATH}/imagen_fondo_jugar.png",SIZE_SCREEN)
 BANDERA = escalar_imagenes_fondo(f"{PATH}/bandera_mina.png",(20,20))
 FONDO_NIVELES = escalar_imagenes_fondo(f"{PATH}/Fondo_selector_nivel.png",SIZE_SCREEN)
-WIN_FONDO = escalar_imagenes_fondo(f'{PATH}/you_win.png', SIZE_SCREEN)
+WIN_IMAGE = escalar_imagenes_fondo(f'{PATH}/you_win.png', SIZE_SCREEN)
 # musica
 LOSE_MUSIC = pygame.mixer.Sound(f"{PATH}/Game Over.mp3")
 WIN_MUSIC = pygame.mixer.Sound(f"{PATH}/Game Win.mp3")
