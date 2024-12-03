@@ -98,6 +98,7 @@ def guardar_puntuacion(screen:pygame.Surface,puntos_en_pantalla:pygame.Surface,d
                     cargar_archivo('Player score/player_score.json',{"nombre":nombre_ingresado,"puntuacion":cont_puntos})
                     flag = False
                     LOSE_MUSIC.stop()
+                    WIN_MUSIC.stop()
                     niveles(screen)
                 elif event.key == pygame.K_BACKSPACE:
                         nombre_ingresado = nombre_ingresado[0:-1]                                      
